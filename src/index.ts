@@ -1,5 +1,5 @@
 require("dotenv").config();
-import app from "./lib/bootstrap";
+import { app, server } from "./lib/bootstrap";
 
 import { userController } from "./controllers/userController";
 import mongoose from "mongoose";
@@ -13,6 +13,7 @@ import { queue } from "./lib/queue";
 import "./lib/worker";
 import { Request, Response } from "express";
 import "./lib/event-listeners";
+
 const bodyParser = require("body-parser");
 
 const port = 3000;
@@ -55,7 +56,7 @@ app.post("/change-password", async (req: Request, res: Response) => {
   res.json({ message: "password change email sent successfully" });
 });
 
-app.listen(port, async () => {
+server.listen(port, async () => {
   transporter
     .verify()
     .then(() => {
@@ -75,3 +76,10 @@ async function shutdown() {
 
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
+
+/**
+ * channels
+ * _id, name, description, createdAt, updatedAt, subscripers []
+ * 1, xyz, xyz channel, 2023-10-01, 2023-10-01, [1,2,3]
+ * 2, abc, abc channel, 2023-10-01, 2023-10-01, [1,2]
+ */

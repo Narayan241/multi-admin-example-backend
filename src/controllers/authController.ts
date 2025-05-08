@@ -8,7 +8,7 @@ import { Request, Response } from "express";
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  console.log("login request body: ", email, password);
+
   const user = await User.findOne({ email });
   if (!user) {
     return res.status(400).json({ message: "User not found" });
@@ -24,7 +24,16 @@ export const login = async (req: Request, res: Response) => {
   user.updatedAt = new Date();
   await user.save();
 
-  res.success(accessToken, "Login successful");
+  res.success(
+    {
+      accessToken,
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    },
+    "Login successful"
+  );
 };
 
 export const authController = {
