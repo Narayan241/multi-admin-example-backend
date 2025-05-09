@@ -31,7 +31,13 @@ const wss = new WebSocketServer({ server });
 wss.on("connection", (ws) => {
   console.log("New client connected");
 
-  ws.send(JSON.stringify({ message: "Welcome, client!" }));
+  ws.send(
+    JSON.stringify({
+      channel: "test",
+      event: "message",
+      data: { message: "Welcome, client!" },
+    })
+  );
 
   // Listen to messages from client
   ws.on("message", (data) => {
