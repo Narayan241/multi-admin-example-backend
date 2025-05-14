@@ -13,6 +13,7 @@ import { queue } from "./lib/queue";
 import "./lib/worker";
 import { Request, Response } from "express";
 import "./lib/event-listeners";
+import { getCurrentUser } from "./middleware/getCurrentUser";
 
 const bodyParser = require("body-parser");
 
@@ -28,6 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1/users", userController.getUsers);
 
 app.post("/auth/login", authController.login);
+app.get("/auth/current-user", getCurrentUser, authController.getCurrentUser);
 
 app.use("/users", userRoutes);
 

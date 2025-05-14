@@ -6,6 +6,8 @@ import bcrypt from "bcrypt";
 
 import { Request, Response } from "express";
 
+import createHttpError from "http-errors";
+
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
@@ -36,6 +38,21 @@ export const login = async (req: Request, res: Response) => {
   );
 };
 
+function getCurrentUser(req: Request, res: Response) {
+  const user = req.currentUser;
+  if (!user) {
+    return res.error(createHttpError.NotFound("User not found"));
+  }
+  res.success(
+    {
+      accessToken: req.accessToken,
+      user,
+    },
+    "Current user retrieved successfully"
+  );
+}
+
 export const authController = {
   login,
+  getCurrentUser,
 };

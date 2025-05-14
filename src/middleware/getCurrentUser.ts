@@ -7,6 +7,9 @@ export async function getCurrentUser(
   next: NextFunction
 ) {
   const accessToken = req.headers["authorization"]?.split(" ")[1];
+  if (accessToken) {
+    req.accessToken = accessToken;
+  }
   const user = await User.findOne({
     accessTokens: accessToken,
   });

@@ -33,11 +33,12 @@ export const createUser = async (req: Request, res: Response) => {
   });
 
   const hashedPassword = bcrypt.hashSync(password, 10);
-
+  const accessToken = v6();
   const user = await User.create({
     email,
     password: hashedPassword,
     name,
+    accessTokens: [accessToken],
     verificationTokens: [verificationToken._id],
   });
 
@@ -45,7 +46,13 @@ export const createUser = async (req: Request, res: Response) => {
   //fire event user created
   //await sendVerificationEmail(user.email, verificationToken.token);
 
-  res.json({ message: "User created", user });
+  res.success(
+    {
+      accessToken,
+      user,
+    },
+    "User created successfully"
+  );
 };
 
 export const userController = {

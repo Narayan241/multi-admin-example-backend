@@ -36,6 +36,12 @@ const userSchema = new Schema({
       ref: "VerificationToken",
     },
   ],
+  roles: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Role",
+    },
+  ],
   accessTokens: [
     {
       type: String,
